@@ -6,13 +6,17 @@ from django.views.generic import (
     UpdateView,
     DeleteView)
 
+from .forms import (
+    ProjectForm,
+    TaskForm,
+)
 from .models import (
     Project,
     Task,
 )
 
 
-# Projects
+# ---Projects---
 class ProjectListView(ListView):
     model = Project
     template_name = 'projects/projects_list.html'
@@ -21,22 +25,22 @@ class ProjectListView(ListView):
     context_object_name = 'projects_list'
 
 
+class ProjectCreate(CreateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'projects/forms/project_cu_form.html'
+
+
 class ProjectDetailView(DetailView):
     model = Project
     template_name = 'projects/project_detail.html'
     context_object_name = 'project'
 
 
-class ProjectCreate(CreateView):
-    model = Project
-    fields = '__all__'
-    template_name_suffix = '_create_form'
-
-
 class ProjectUpdate(UpdateView):
     model = Project
     fields = '__all__'
-    template_name_suffix = '_update_form'
+    template_name = 'projects/forms/project_cu_form.html'
 
 
 class ProjectDelete(DeleteView):
@@ -46,11 +50,17 @@ class ProjectDelete(DeleteView):
 
 # ---END PROJECTS---
 
-# Tasks
+# ---Tasks---
 class TaskDetailView(DetailView):
     model = Task
     template_name = 'projects/task_detail.html'
     context_object_name = 'task'
+
+
+class TaskCreate(CreateView):
+    model = Task
+    form_class = TaskForm
+    template_name = 'projects/forms/task_cu_form.html'
 
 
 class TaskListView(ListView):
@@ -59,5 +69,16 @@ class TaskListView(ListView):
     queryset = Task.objects.all()
 
     context_object_name = 'tasks_list'
+
+
+class TaskUpdate(UpdateView):
+    model = Task
+    fields = '__all__'
+    template_name = 'projects/forms/task_cu_form.html'
+
+
+class TaskDelete(DeleteView):
+    model = Project
+    success_url = reverse_lazy('tasks_list')
 
 # ---END TASKS---

@@ -5,23 +5,16 @@ from .models import (
     Project,
     Task,
     Status,
-)
+    Url)
 
 
-class ProjectAdmin(admin.ModelAdmin):
+class AddAdmin(admin.ModelAdmin):
     list_display = ['name']
 
 
-class TaskAdmin(admin.ModelAdmin):
-    list_display = ['name']
-
-
-class StatusAdmin(admin.ModelAdmin):
-    list_display = ['name']
-
-
-admin.site.register(Task, TaskAdmin)
-admin.site.register(Status, StatusAdmin)
+admin.site.register(Task, AddAdmin)
+admin.site.register(Status, AddAdmin)
+admin.site.register(Url, AddAdmin)
 
 
 class ProjectsAdmin(admin.ModelAdmin):

@@ -1,29 +1,28 @@
 from django import forms
 
-from projects import (
+from .models import (
     Task,
     Project
 )
 
 
-# class EmailPostForm(forms.Form):
-#     name = forms.CharField(max_length=25)
-#     email = forms.EmailField()
-#     to = forms.EmailField()
-#     comments = forms.CharField(required=False,
-#                                widget=forms.Textarea)
-
-
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = '__all__'
+        fields = [
+            'name',
+            'slug',
+            'descriptions',
+            'project_manager',
+            'project_status',
+            'url'
+        ]
+
 
 
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = [
 
-# class SearchForm(forms.Form):
-#     query = forms.CharField()
+        ]

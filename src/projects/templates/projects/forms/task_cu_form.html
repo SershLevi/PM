@@ -1,0 +1,14 @@
+{% extends "projects/base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}{{ task.project.name }} | {{ task.name }}{% endblock %}
+
+{% block content %}
+<!--{% if task %}-->
+<h1>{{ task.name }}</h1>
+<form method="post">{% csrf_token %}
+    {{ form|crispy}}
+    <input type="submit" value="submit">
+</form>
+<!--{% endif %}-->
+
+{% endblock %}

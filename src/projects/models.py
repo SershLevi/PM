@@ -41,7 +41,9 @@ class BaseClass(BaseProjectAppClass):
         null=False,
     )
     slug = models.SlugField(
-        max_length=30
+        max_length=30,
+        blank=False,
+        null=False
     )
     descriptions = models.TextField(
         max_length=2000
@@ -59,6 +61,21 @@ class Status(BaseClass):
     is_active = models.BooleanField(
         default=True
     )
+
+
+class Url(models.Model):
+    name = models.CharField(
+        max_length=100,
+        blank=False,
+        null=False,
+    )
+
+    url = models.URLField(
+
+    )
+
+    def __str__(self):
+        return self.name
 
 
 class Project(BaseClass):
@@ -82,6 +99,12 @@ class Project(BaseClass):
         null=False,
         verbose_name='project status',
         related_name='projects',
+    )
+
+    url = models.ManyToManyField(
+        Url,
+        blank=True,
+
     )
 
     def get_absolute_url(self):
@@ -111,13 +134,13 @@ class Task(BaseClass, MPTTModel):
         related_name='children'
     )
 
-    task_project = models.ForeignKey(
-        to=Project,
-        on_delete=models.CASCADE,
+    task_executor = models.ForeignKey(
+        to=Account,
+        on_delete=models.SET_NULL,
         blank=False,
-        null=False,
-        verbose_name='project',
-        related_name='tasks'
+        null=True,
+        verbose_name='task executor',
+        related_name='executor'
     )
 
     task_status = models.ForeignKey(
@@ -134,11 +157,13 @@ class Task(BaseClass, MPTTModel):
         blank=False,
         verbose_name='task staff',
     )
-    task_result_url = models.URLField(
-
-    )
 
     task_price = models.FloatField(
+
+    )
+    url = models.ManyToManyField(
+        Url,
+        blank=True,
 
     )
 
@@ -158,19 +183,25 @@ class Message(BaseProjectAppClass):
         blank=False,
         null=False,
         verbose_name='comment_author',
+        related_name='accounts'
     )
 
     task = models.ForeignKey(
         Task,
         on_delete=models.CASCADE,
-        related_name='task'
+        related_name='tasks'
 
+    )
+
+    url = models.ManyToManyField(
+        Url,
+        blank=True
     )
 
     def get_absolute_url(self):
         return reverse('projects:message_detail',
                        args=[
-                           self.slug
+                           self.id
                        ])
 
     def __str__(self):
