@@ -1,0 +1,46 @@
+{% extends "projects/base.html" %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+{% if task %}
+<h1>{{ task.name }}</h1>
+<!--<table class="table table-striped table-sm">-->
+    <!--<thead>-->
+    <!--<tr>-->
+        <!--<th>Project name</th>-->
+        <!--<th>Description</th>-->
+        <!--<th>Lead</th>-->
+        <!--<th>Header</th>-->
+        <!--<th>Header</th>-->
+    <!--</tr>-->
+    <!--</thead>-->
+    <!--<tbody>-->
+    <!--{% for task in project.tasks.all %}-->
+    <!--<tr>-->
+        <!--<td>-->
+            <!--<h5>-->
+                <!--&lt;!&ndash;<a href="{{ task.get_absolute_url }}">&ndash;&gt;-->
+                <!--{{ task.name }}-->
+                <!--&lt;!&ndash;</a>&ndash;&gt;-->
+            <!--</h5>-->
+        <!--</td>-->
+        <!--<td>-->
+            <!--&lt;!&ndash;{{ project.descriptions }}&ndash;&gt;-->
+        <!--</td>-->
+        <!--<td>-->
+            <!--&lt;!&ndash;<a href="{{ project.project_manager.get_full_name}}">&ndash;&gt;-->
+            <!--&lt;!&ndash;{{ project.project_manager.get_full_name }}&ndash;&gt;-->
+            <!--&lt;!&ndash;</a>&ndash;&gt;-->
+        <!--</td>-->
+        <!--<td>project_status</td>-->
+        <!--<td>sit</td>-->
+    <!--</tr>-->
+    <!--{% endfor %}-->
+
+    <!--</tbody>-->
+<!--</table>-->
+{% endif %}
+
+
+{% endblock %}

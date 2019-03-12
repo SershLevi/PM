@@ -1,0 +1,50 @@
+{% extends "projects/base.html" %}
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+{% if tasks_list %}
+<h1>Tasks</h1>
+<table class="table table-striped table-sm">
+    <thead>
+    <tr>
+        <th>Task name</th>
+        <th>Project</th>
+        <th>Description</th>
+        <th>Lead</th>
+        <th>Header</th>
+    </tr>
+    </thead>
+    {% for task in tasks_list %}
+    <tbody>
+    <tr>
+        <td>
+            <h5>
+                <a href="{{ task.get_absolute_url }}">
+                    {{ task.name }}
+                </a>
+            </h5>
+        </td>
+        <td>
+            <h5>
+                <a href="{{ task.task_project.get_absolute_url }}">
+                    {{ task.task_project }}
+                </a>
+            </h5>
+        </td>
+        <td>
+            {{ task.descriptions }}
+        </td>
+        <td>
+            <a href="{{ task.project_manager.get_full_name}}">
+                {{ task.project_manager.get_full_name }}
+            </a>
+        </td>
+        <td>project_status</td>
+        <td>sit</td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+{% endif %}
+{% endblock %}
