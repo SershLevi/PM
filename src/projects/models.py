@@ -8,7 +8,8 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
 
-class BaseProjectAppClass(models.Model):
+#TODO: Установить уникальные поля для исключения повторяющихся значений.
+class CreateModificateAbstactClass(models.Model):
     class Meta:
         abstract = True
 
@@ -31,7 +32,7 @@ class BaseProjectAppClass(models.Model):
     )
 
 
-class BaseClass(BaseProjectAppClass):
+class BaseClass(CreateModificateAbstactClass):
     class Meta:
         abstract = True
 
@@ -53,18 +54,25 @@ class BaseClass(BaseProjectAppClass):
         return self.name
 
 
+class Priority(BaseClass):
+    class Meta:
+        verbose_name = _('priority')
+        verbose_name_plural = _('priorities')
+
+    value = models.PositiveIntegerField()
+
+    def __str__(self):
+        return self.name
+
+
 class Status(BaseClass):
     class Meta:
         verbose_name = _('status')
         verbose_name_plural = _('statuses')
 
-    is_active = models.BooleanField(
-        default=True
-    )
 
-
-class Url(models.Model):
-    name = models.CharField(
+class Url(CreateModificateAbstactClass):
+    description = models.CharField(
         max_length=100,
         blank=False,
         null=False,
@@ -75,7 +83,11 @@ class Url(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return self.description
+
+
+class Brand(BaseClass):
+    pass
 
 
 class Project(BaseClass):
@@ -83,16 +95,25 @@ class Project(BaseClass):
         verbose_name = _('project')
         verbose_name_plural = _('projects')
 
-    project_manager = models.ForeignKey(
+    brand = models.ForeignKey(
+        to=Brand,
+        on_delete=models.SET_NULL,
+        blank=False,
+        null=True,
+        verbose_name='brand',
+        related_name='projects'
+    )
+
+    manager = models.ForeignKey(
         to=Account,
         on_delete=models.SET_NULL,
         blank=False,
         null=True,
         verbose_name='project manager',
-        related_name='managers'
+        related_name='projects'
     )
 
-    project_status = models.ForeignKey(
+    status = models.ForeignKey(
         to=Status,
         on_delete=models.SET('undefined'),
         blank=False,
@@ -134,31 +155,37 @@ class Task(BaseClass, MPTTModel):
         related_name='children'
     )
 
-    task_executor = models.ForeignKey(
+    personal = models.ForeignKey(
         to=Account,
         on_delete=models.SET_NULL,
         blank=False,
         null=True,
-        verbose_name='task executor',
-        related_name='executor'
+        verbose_name='performer',
+        related_name='tasks'
     )
 
-    task_status = models.ForeignKey(
+    project = models.ForeignKey(
+        to=Project,
+        on_delete=models.CASCADE,
+        blank=False,
+        null=False,
+        verbose_name='project',
+        related_name='tasks',
+    )
+
+    status = models.ForeignKey(
         to=Status,
         on_delete=models.CASCADE,
         blank=False,
         null=False,
-        verbose_name='task status',
+        verbose_name='status',
         related_name='tasks',
     )
 
-    task_staff = models.ManyToManyField(
-        to=Account,
-        blank=False,
-        verbose_name='task staff',
-    )
-
-    task_price = models.FloatField(
+    price = models.FloatField(
+        blank=True,
+        null=True,
+        verbose_name='price',
 
     )
     url = models.ManyToManyField(
@@ -167,8 +194,6 @@ class Task(BaseClass, MPTTModel):
 
     )
 
-    # TODO: Поля - Стоимость, Исполнитель, Комментарии,
-
     def get_absolute_url(self):
         return reverse('projects:task_detail',
                        args=[
@@ -176,21 +201,24 @@ class Task(BaseClass, MPTTModel):
                        ])
 
 
-class Message(BaseProjectAppClass):
-    message_author = models.ForeignKey(
+class Message(CreateModificateAbstactClass):
+    author = models.ForeignKey(
         to=Account,
         on_delete=models.CASCADE,
         blank=False,
         null=False,
-        verbose_name='comment_author',
-        related_name='accounts'
+        verbose_name='message author',
+        related_name='messages'
     )
 
     task = models.ForeignKey(
         Task,
         on_delete=models.CASCADE,
-        related_name='tasks'
+        related_name='messages'
 
+    )
+    text = models.TextField(
+        max_length=1000
     )
 
     url = models.ManyToManyField(
@@ -199,10 +227,10 @@ class Message(BaseProjectAppClass):
     )
 
     def get_absolute_url(self):
-        return reverse('projects:message_detail',
+        return reverse('projects:task_detail',
                        args=[
-                           self.id
+                           self.task.slug
                        ])
 
     def __str__(self):
-        return '{} about {}'.format(self.message_author.get_full_name, self.task.name)
+        return '{} about {}'.format(self.author.get_full_name, self.task.name)

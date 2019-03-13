@@ -1,5 +1,5 @@
 {% extends "projects/base.html" %}
-{% block title %}Projects{% endblock %}
+{% block title %}Tasks{% endblock %}
 
 {% block content %}
 {% if tasks_list %}
@@ -8,10 +8,11 @@
     <thead>
     <tr>
         <th>Task name</th>
-        <th>Project</th>
         <th>Description</th>
-        <th>Lead</th>
+        <th>Performer</th>
         <th>Header</th>
+        <th>Project name</th>
+        <th>Project lead</th>
     </tr>
     </thead>
     {% for task in tasks_list %}
@@ -25,22 +26,30 @@
             </h5>
         </td>
         <td>
+            {{ task.descriptions }}
+        </td>
+        <td>
+            <a href="{{ task.performer.get_full_name}}">
+                {{ task.performer.get_full_name }}
+            </a>
+        </td>
+        <td>{{task.status}}</td>
+        <td>
             <h5>
-                <a href="{{ task.task_project.get_absolute_url }}">
-                    {{ task.task_project }}
+                <a href="{{ task.project.get_absolute_url }}">
+                    {{ task.project }}
                 </a>
             </h5>
         </td>
         <td>
-            {{ task.descriptions }}
+            <h5>
+                <a href="{{ task.project.manager.get_absolute_url }}">
+                    {{ task.project.manager.get_full_name }}
+                </a>
+            </h5>
         </td>
-        <td>
-            <a href="{{ task.project_manager.get_full_name}}">
-                {{ task.project_manager.get_full_name }}
-            </a>
-        </td>
-        <td>project_status</td>
-        <td>sit</td>
+
+
     </tr>
     {% endfor %}
 

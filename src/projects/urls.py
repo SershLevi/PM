@@ -6,27 +6,27 @@ app_name = 'projects'
 urlpatterns = [
     # ---Projects---
     path(
-        '',
+        'projects/',
         views.ProjectListView.as_view(),
         name='projects_list'
     ),
     path(
-        'create/',
+        'project/create/',
         views.ProjectCreate.as_view(),
-        name='project_create'
+        name='project_create',
     ),
     path(
-        '<slug:slug>/',
+        'project/<slug:slug>/',
         views.ProjectDetailView.as_view(),
         name='project_detail'
     ),
     path(
-        '<slug:slug>/update/',
+        'project/<slug:slug>/update/',
         views.ProjectUpdate.as_view(),
         name='project_update'
     ),
     path(
-        '<slug:slug>/delete/',
+        'project/<slug:slug>/delete/',
         views.ProjectDelete.as_view(),
         name='project_delete'
     ),
@@ -38,7 +38,7 @@ urlpatterns = [
         name='tasks_list'
     ),
     path(
-        'tasks/create/',
+        'task/create/',
         views.TaskCreate.as_view(),
         name='task_create'
     ),
@@ -58,4 +58,11 @@ urlpatterns = [
         name='task_delete'
     ),
     # ---END Tasks---
+
+    path(
+        'message',
+        views.MessageCreate.as_view(),
+        name='add_message'
+    ),
+
 ]

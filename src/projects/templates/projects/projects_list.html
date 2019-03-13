@@ -28,11 +28,11 @@
             {{ project.descriptions }}
         </td>
         <td>
-            <a href="{{ project.project_manager.get_full_name}}">
-                {{ project.project_manager.get_full_name }}
+            <a href="{{ project.manager.get_full_name}}">
+                {{ project.manager.get_full_name }}
             </a>
         </td>
-        <td>{{ project.project_status }}</td>
+        <td>{{ project.status }}</td>
     </tr>
     {% endfor %}
 

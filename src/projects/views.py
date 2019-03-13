@@ -7,13 +7,12 @@ from django.views.generic import (
     DeleteView)
 
 from .forms import (
-    ProjectForm,
     TaskForm,
-)
+    ProjectForm, MessageForm)
 from .models import (
     Project,
     Task,
-)
+    Message)
 
 
 # ---Projects---
@@ -51,10 +50,13 @@ class ProjectDelete(DeleteView):
 # ---END PROJECTS---
 
 # ---Tasks---
-class TaskDetailView(DetailView):
+
+class TaskListView(ListView):
     model = Task
-    template_name = 'projects/task_detail.html'
-    context_object_name = 'task'
+    template_name = 'projects/tasks_list.html'
+    queryset = Task.objects.all()
+
+    context_object_name = 'tasks_list'
 
 
 class TaskCreate(CreateView):
@@ -63,12 +65,10 @@ class TaskCreate(CreateView):
     template_name = 'projects/forms/task_cu_form.html'
 
 
-class TaskListView(ListView):
+class TaskDetailView(DetailView):
     model = Task
-    template_name = 'projects/tasks_list.html'
-    queryset = Task.objects.all()
-
-    context_object_name = 'tasks_list'
+    template_name = 'projects/task_detail.html'
+    context_object_name = 'task'
 
 
 class TaskUpdate(UpdateView):
@@ -81,4 +81,11 @@ class TaskDelete(DeleteView):
     model = Project
     success_url = reverse_lazy('tasks_list')
 
+
 # ---END TASKS---
+
+
+class MessageCreate(CreateView):
+    model = Message
+    form_class = MessageForm
+    template_name = 'projects/forms/message_cu_form.html'

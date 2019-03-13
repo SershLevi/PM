@@ -1,45 +1,83 @@
 {% extends "projects/base.html" %}
+{% load crispy_forms_tags %}
 
 {% block title %}{{ project.name }}{% endblock %}
 
 {% block content %}
 {% if task %}
 <h1>{{ task.name }}</h1>
-<!--<table class="table table-striped table-sm">-->
-    <!--<thead>-->
-    <!--<tr>-->
-        <!--<th>Project name</th>-->
-        <!--<th>Description</th>-->
-        <!--<th>Lead</th>-->
-        <!--<th>Header</th>-->
-        <!--<th>Header</th>-->
-    <!--</tr>-->
-    <!--</thead>-->
-    <!--<tbody>-->
-    <!--{% for task in project.tasks.all %}-->
-    <!--<tr>-->
-        <!--<td>-->
-            <!--<h5>-->
-                <!--&lt;!&ndash;<a href="{{ task.get_absolute_url }}">&ndash;&gt;-->
-                <!--{{ task.name }}-->
-                <!--&lt;!&ndash;</a>&ndash;&gt;-->
-            <!--</h5>-->
-        <!--</td>-->
-        <!--<td>-->
-            <!--&lt;!&ndash;{{ project.descriptions }}&ndash;&gt;-->
-        <!--</td>-->
-        <!--<td>-->
-            <!--&lt;!&ndash;<a href="{{ project.project_manager.get_full_name}}">&ndash;&gt;-->
-            <!--&lt;!&ndash;{{ project.project_manager.get_full_name }}&ndash;&gt;-->
-            <!--&lt;!&ndash;</a>&ndash;&gt;-->
-        <!--</td>-->
-        <!--<td>project_status</td>-->
-        <!--<td>sit</td>-->
-    <!--</tr>-->
-    <!--{% endfor %}-->
 
-    <!--</tbody>-->
-<!--</table>-->
+<h5><a href="{% url 'projects:task_update' task.slug%}">Update Task</a></h5>
+<h5><a href="{% url 'projects:task_delete' task.slug%}">Delete Task</a></h5>
+
+<table class="table table-striped table-sm">
+    <thead>
+    <tr>
+        <th>Task name</th>
+        <th>Task status</th>
+        <th>Task description</th>
+        <th>Task lead</th>
+        <th>Creation</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <a href="{{ task.project.get_absolute_url }}">
+                {{ task.project.name }}
+            </a>
+        </td>
+        <td>
+            {{ task.status }}
+        </td>
+        <td>
+            {{ task.descriptions }}
+        </td>
+        <td>
+            {{ task.performer.get_full_name }}
+        </td>
+        <td>
+            {{ task.creation_timestamp }}
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+Messages
+<table class="table table-striped table-sm">
+    <thead>
+    <tr>
+        <th>Author</th>
+        <th>Date</th>
+        <th>Text</th>
+        <th>URLS</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for message in task.messages.all %}
+    <tr>
+        <td>
+            {{ message.author.get_full_name }}
+        </td>
+        <td>
+            {{ message.creation_timestamp }}
+        </td>
+        <td>
+            {{ message.text }}
+        </td>
+        <td>
+            {{ message.url }}
+        </td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+</table>
+
+<form action="{% url 'projects:add_message'%}" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Write message</button>
+</form>
 {% endif %}
 
 

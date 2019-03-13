@@ -10,22 +10,26 @@
 <table class="table table-striped table-sm">
     <thead>
     <tr>
+        <th>Brand</th>
+        <th>Project Status</th>
         <th>Description</th>
         <th>Project Lead</th>
-        <th>Status</th>
     </tr>
     </thead>
     <tbody>
     <tr>
         <td>
+            {{ project.brand }}
+        </td>
+        <td>{{ project.status }}</td>
+        <td>
             {{ project.descriptions }}
         </td>
         <td>
-            <a href="{{ project.project_manager.get_full_name}}">
-                {{ project.project_manager.get_full_name }}
-            </a>
+            <!--<a href="{{ project.manager.get_full_name}}">-->
+            {{ project.manager.get_full_name }}
+            <!--</a>-->
         </td>
-        <td>{{ project.project_status }}</td>
     </tr>
 
     </tbody>
@@ -38,30 +42,32 @@
     <thead>
     <tr>
         <th>Task name</th>
+        <th>Status</th>
         <th>Description</th>
         <th>Task Lead</th>
+        <th>Create</th>
     </tr>
     </thead>
     <tbody>
     {% for task in project.tasks.all %}
     <tr>
         <td>
-            <h5>
-                <a href="{{ task.get_absolute_url }}">
-                    {{ task.name }}
-                </a>
-            </h5>
+            <a href="{{ task.get_absolute_url }}">
+                {{ task.name }}
+            </a>
         </td>
         <td>
-            <!--{{ project.descriptions }}-->
+            {{ task.status }}
         </td>
         <td>
-            <!--<a href="{{ project.project_manager.get_full_name}}">-->
-            <!--{{ project.project_manager.get_full_name }}-->
-            <!--</a>-->
+            {{ task.descriptions }}
         </td>
-        <td>project_status</td>
-        <td>sit</td>
+        <td>
+            {{ task.performer.get_full_name }}
+        </td>
+        <td>
+            {{ task.creation_timestamp }}
+        </td>
     </tr>
     {% endfor %}
 

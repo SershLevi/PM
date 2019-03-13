@@ -5,16 +5,21 @@ from .models import (
     Project,
     Task,
     Status,
-    Url)
+    Url, Brand, Message)
 
 
 class AddAdmin(admin.ModelAdmin):
     list_display = ['name']
 
+class Add2Admin(admin.ModelAdmin):
+    list_display = ['text']
+
 
 admin.site.register(Task, AddAdmin)
 admin.site.register(Status, AddAdmin)
-admin.site.register(Url, AddAdmin)
+# admin.site.register(Url, AddAdmin)
+admin.site.register(Brand, AddAdmin)
+admin.site.register(Message, Add2Admin)
 
 
 class ProjectsAdmin(admin.ModelAdmin):
@@ -23,8 +28,8 @@ class ProjectsAdmin(admin.ModelAdmin):
     list_display = [
         'name',
         'get_absolute_url',
-        'project_manager',
-        'project_status',
+        'manager',
+        'status',
     ]
 
     list_filter = (

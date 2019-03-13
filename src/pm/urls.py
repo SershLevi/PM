@@ -3,8 +3,9 @@ from django.urls import path, include
 
 from pm.settings import actual
 
+app_name = 'core'
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('projects/', include('projects.urls')),
     path('accounts/', include('accounts.urls')),
     # path('about/',),

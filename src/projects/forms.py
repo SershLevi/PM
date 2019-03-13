@@ -2,27 +2,28 @@ from django import forms
 
 from .models import (
     Task,
-    Project
-)
+    Project,
+    Message)
 
 
 class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
-        fields = [
-            'name',
-            'slug',
-            'descriptions',
-            'project_manager',
-            'project_status',
-            'url'
-        ]
-
+        fields = '__all__'
 
 
 class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = [
+        fields = '__all__'
 
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = [
+            'author',
+            'text',
+            'task',
         ]
+
