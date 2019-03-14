@@ -63,14 +63,20 @@ class Priority(BaseClass):
 
     value = models.PositiveIntegerField()
 
-    def __str__(self):
-        return self.name
+    def get_absolute_url(self):
+        return reverse('projects:priority_detail',
+                       args=[
+                           self.slug
+                       ])
 
 
 class Status(BaseClass):
     class Meta:
         verbose_name = _('status')
         verbose_name_plural = _('statuses')
+
+    def get_absolute_url(self):
+        return reverse('projects:statuses_list')
 
 
 class Url(CreateModificateAbstactClass):
@@ -111,7 +117,7 @@ class Project(BaseClass):
         related_name='projects'
     )
 
-    manager = models.ForeignKey(
+    person = models.ForeignKey(
         to=Account,
         on_delete=models.SET_NULL,
         blank=False,
@@ -123,9 +129,18 @@ class Project(BaseClass):
     status = models.ForeignKey(
         to=Status,
         on_delete=models.SET('undefined'),
+        default='Undefined',
         blank=False,
-        null=False,
         verbose_name='project status',
+        related_name='projects',
+    )
+
+    priority = models.ForeignKey(
+        to=Priority,
+        default=999,
+        blank=False,
+        on_delete=models.SET(999),
+        verbose_name='project priority',
         related_name='projects',
     )
 
@@ -162,7 +177,7 @@ class Task(BaseClass, MPTTModel):
         related_name='children'
     )
 
-    personal = models.ForeignKey(
+    person = models.ForeignKey(
         to=Account,
         on_delete=models.SET_NULL,
         blank=False,
@@ -198,6 +213,17 @@ class Task(BaseClass, MPTTModel):
     url = models.ManyToManyField(
         Url,
         blank=True,
+
+    )
+
+    done_timestamp = models.DateTimeField(
+        verbose_name='done time',
+        editable=True,
+
+    )
+    to_pay_timestamp = models.DateTimeField(
+        verbose_name='to pay time',
+        editable=True,
 
     )
 

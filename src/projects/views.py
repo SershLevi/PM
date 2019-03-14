@@ -8,7 +8,7 @@ from django.views.generic import (
 
 from .forms import (
     TaskForm,
-    ProjectForm, MessageForm, BrandForm)
+    ProjectForm, MessageForm, BrandForm, StatusForm)
 from .models import (
     Project,
     Task,
@@ -128,7 +128,7 @@ class StatusListView(ListView):
 
 class StatusCreate(CreateView):
     model = Status
-    form_class = BrandForm
+    form_class = StatusForm
     template_name = 'projects/forms/status_cu_form.html'
 
 
