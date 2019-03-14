@@ -40,17 +40,14 @@
         <li class="nav-item text-nowrap">
             {% if user.is_authenticated %}
             <a class="nav-link" href="#">{{user.get_full_name}}</a>
-            {% else %}
-            NOT AUTHORIZATE
-            {% endif %}
             {% if user.is_superuser %}
-            <!--<a class="nav-link" href="{% url 'core:admin' %}">-->
+            <a class="nav-link" href="{% url 'admin:index' %}">
                 ADMIN PAGE
-            <!--</a>-->
-
+            </a>
             {% endif %}
-
-
+            {% else %}
+            NEED AUTHIRIZATION
+            {% endif %}
         </li>
     </ul>
 </nav>
@@ -59,7 +56,18 @@
     <div class="row">
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
             <div class="sidebar-sticky">
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Task Manager</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                        <span data-feather="plus-circle"></span>
+                    </a>
+                </h6>
                 <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'projects:brands_list' %}">
+                            Brands
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'projects:projects_list' %}">
                             Projects
@@ -71,7 +79,6 @@
                         </a>
                     </li>
                 </ul>
-
                 <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
                     <span>Saved reports</span>
                     <a class="d-flex align-items-center text-muted" href="#">
@@ -101,6 +108,19 @@
                         <a class="nav-link" href="#">
                             <span data-feather="file-text"></span>
                             Year-end sale
+                        </a>
+                    </li>
+                </ul>
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                    <span>Settings</span>
+                    <a class="d-flex align-items-center text-muted" href="#">
+                        <span data-feather="plus-circle"></span>
+                    </a>
+                </h6>
+                <ul class="nav flex-column mb-2">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'projects:statuses_list' %}">
+                            Statuses
                         </a>
                     </li>
                 </ul>

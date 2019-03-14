@@ -3,7 +3,9 @@ from django import forms
 from .models import (
     Task,
     Project,
-    Message)
+    Message,
+    Brand,
+    Status)
 
 
 class ProjectForm(forms.ModelForm):
@@ -18,12 +20,19 @@ class TaskForm(forms.ModelForm):
         fields = '__all__'
 
 
+class BrandForm(forms.ModelForm):
+    class Meta:
+        model = Brand
+        fields = '__all__'
+
+
+class StatusForm(forms.ModelForm):
+    class Meta:
+        model = Status
+        fields = '__all__'
+
+
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = [
-            'author',
-            'text',
-            'task',
-        ]
-
+        fields = '__all__'

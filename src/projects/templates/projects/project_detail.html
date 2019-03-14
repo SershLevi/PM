@@ -19,7 +19,9 @@
     <tbody>
     <tr>
         <td>
-            {{ project.brand }}
+            <a href="{{ project.brand.get_absolute_url }}">
+                {{ project.brand }}
+            </a>
         </td>
         <td>{{ project.status }}</td>
         <td>

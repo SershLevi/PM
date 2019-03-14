@@ -8,7 +8,6 @@ from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
 
 
-#TODO: Установить уникальные поля для исключения повторяющихся значений.
 class CreateModificateAbstactClass(models.Model):
     class Meta:
         abstract = True
@@ -40,12 +39,15 @@ class BaseClass(CreateModificateAbstactClass):
         max_length=100,
         blank=False,
         null=False,
+        unique=True
     )
+
     slug = models.SlugField(
         max_length=30,
         blank=False,
         null=False
     )
+
     descriptions = models.TextField(
         max_length=2000
     )
@@ -87,7 +89,12 @@ class Url(CreateModificateAbstactClass):
 
 
 class Brand(BaseClass):
-    pass
+
+    def get_absolute_url(self):
+        return reverse('projects:brand_detail',
+                       args=[
+                           self.slug
+                       ])
 
 
 class Project(BaseClass):

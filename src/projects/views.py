@@ -8,11 +8,11 @@ from django.views.generic import (
 
 from .forms import (
     TaskForm,
-    ProjectForm, MessageForm)
+    ProjectForm, MessageForm, BrandForm)
 from .models import (
     Project,
     Task,
-    Message)
+    Message, Brand, Status)
 
 
 # ---Projects---
@@ -50,7 +50,6 @@ class ProjectDelete(DeleteView):
 # ---END PROJECTS---
 
 # ---Tasks---
-
 class TaskListView(ListView):
     model = Task
     template_name = 'projects/tasks_list.html'
@@ -83,6 +82,74 @@ class TaskDelete(DeleteView):
 
 
 # ---END TASKS---
+
+
+# ---Brands---
+class BrandListView(ListView):
+    model = Brand
+    template_name = 'projects/brands_list.html'
+    queryset = Brand.objects.all()
+
+    context_object_name = 'brands_list'
+
+
+class BrandCreate(CreateView):
+    model = Brand
+    form_class = BrandForm
+    template_name = 'projects/forms/brand_cu_form.html'
+
+
+class BrandDetailView(DetailView):
+    model = Brand
+    template_name = 'projects/brand_detail.html'
+    context_object_name = 'brand'
+
+
+class BrandUpdate(UpdateView):
+    model = Brand
+    fields = '__all__'
+    template_name = 'projects/forms/brand_cu_form.html'
+
+
+class BrandDelete(DeleteView):
+    model = Brand
+    success_url = reverse_lazy('brands_list')
+
+
+# ---END Brands---
+# ---Brands---
+class StatusListView(ListView):
+    model = Status
+    template_name = 'projects/statuses_list.html'
+    queryset = Status.objects.all()
+
+    context_object_name = 'statuses_list'
+
+
+class StatusCreate(CreateView):
+    model = Status
+    form_class = BrandForm
+    template_name = 'projects/forms/status_cu_form.html'
+
+
+class StatusDetailView(DetailView):
+    model = Status
+    template_name = 'projects/status_detail.html'
+    context_object_name = 'status'
+
+
+class StatusUpdate(UpdateView):
+    model = Status
+    fields = '__all__'
+    template_name = 'projects/forms/status_cu_form.html'
+
+
+class StatusDelete(DeleteView):
+    model = Status
+    success_url = reverse_lazy('statuses_list')
+
+
+# ---END Brands---
 
 
 class MessageCreate(CreateView):

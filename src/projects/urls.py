@@ -58,7 +58,60 @@ urlpatterns = [
         name='task_delete'
     ),
     # ---END Tasks---
-
+    # ---Brands---
+    path(
+        'brands/',
+        views.BrandListView.as_view(),
+        name='brands_list'
+    ),
+    path(
+        'brand/create/',
+        views.BrandCreate.as_view(),
+        name='brand_create',
+    ),
+    path(
+        'brand/<slug:slug>/',
+        views.BrandDetailView.as_view(),
+        name='brand_detail'
+    ),
+    path(
+        'brand/<slug:slug>/update/',
+        views.BrandUpdate.as_view(),
+        name='brand_update'
+    ),
+    path(
+        'brand/<slug:slug>/delete/',
+        views.BrandDelete.as_view(),
+        name='brand_delete'
+    ),
+    # ---END Brand---
+    # ---Statuses---
+    path(
+        'statuses/',
+        views.StatusListView.as_view(),
+        name='statuses_list'
+    ),
+    path(
+        'status/create/',
+        views.StatusCreate.as_view(),
+        name='status_create',
+    ),
+    path(
+        'status/<slug:slug>/',
+        views.StatusDetailView.as_view(),
+        name='status_detail'
+    ),
+    path(
+        'status/<slug:slug>/update/',
+        views.StatusUpdate.as_view(),
+        name='status_update'
+    ),
+    path(
+        'status/<slug:slug>/delete/',
+        views.StatusDelete.as_view(),
+        name='status_delete'
+    ),
+    # ---END Status---
     path(
         'message',
         views.MessageCreate.as_view(),

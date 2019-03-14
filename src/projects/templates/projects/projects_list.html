@@ -9,20 +9,24 @@
     <thead>
     <tr>
         <th>Project name</th>
+        <th>Project brand</th>
         <th>Description</th>
         <th>Project Lead</th>
         <th>Status</th>
     </tr>
     </thead>
-    {% for project in projects_list %}
     <tbody>
+    {% for project in projects_list %}
     <tr>
         <td>
-            <h5>
-                <a href="{{ project.get_absolute_url }}">
-                    {{ project.name }}
-                </a>
-            </h5>
+            <a href="{{ project.get_absolute_url }}">
+                {{ project.name }}
+            </a>
+        </td>
+        <td>
+            <a href="{{ project.brand.get_absolute_url }}">
+                {{ project.brand }}
+            </a>
         </td>
         <td>
             {{ project.descriptions }}

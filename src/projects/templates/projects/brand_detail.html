@@ -1,0 +1,122 @@
+{% extends "projects/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}{{ project.name }}{% endblock %}
+
+{% block content %}
+{% if brand %}
+<h1>{{ task.name }}</h1>
+
+<h5><a href="{% url 'projects:brand_update' brand.slug%}">Update Brand</a></h5>
+<h5><a href="{% url 'projects:brand_delete' brand.slug%}">Delete Brand</a></h5>
+
+<table class="table table-striped table-sm">
+    <thead>
+    <tr>
+        <th>Brand name</th>
+        <th>Brand description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            {{ brand.name }}
+        </td>
+        <td>
+            {{ brand.descriptions }}
+        </td>
+    </tr>
+
+    </tbody>
+</table>
+{% endif %}
+
+Projects
+<table class="table table-striped table-sm">
+    <thead>
+    <tr>
+        <th>Project name</th>
+        <th>Project brand</th>
+        <th>Description</th>
+        <th>Project Lead</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for project in brand.projects.all %}
+    <tr>
+        <td>
+            <a href="{{ project.get_absolute_url }}">
+                {{ project.name }}
+            </a>
+        </td>
+        <td>
+            <a href="{{ project.brand.get_absolute_url }}">
+                {{ project.brand }}
+            </a>
+        </td>
+        <td>
+            {{ project.descriptions }}
+        </td>
+        <td>
+            <a href="{{ project.manager.get_full_name}}">
+                {{ project.manager.get_full_name }}
+            </a>
+        </td>
+        <td>{{ project.status }}</td>
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+Tasks
+<table class="table table-striped table-sm">
+    <thead>
+    <tr>
+        <th>Task name</th>
+        <th>Project brand</th>
+        <th>Description</th>
+        <th>Project Lead</th>
+        <th>Status</th>
+    </tr>
+    </thead>
+    <tbody>
+    НЕ РАБОТАЕТ
+    {% for task in brand.projects.tasks.all %}
+    <tr>
+        <td>
+            <h5>
+                <a href="{{ task.get_absolute_url }}">
+                    {{ task.name }}
+                </a>
+            </h5>
+        </td>
+        <td>
+            {{ task.descriptions }}
+        </td>
+        <td>
+            <a href="{{ task.performer.get_full_name}}">
+                {{ task.performer.get_full_name }}
+            </a>
+        </td>
+        <td>{{task.status}}</td>
+        <td>
+            <h5>
+                <a href="{{ task.project.get_absolute_url }}">
+                    {{ task.project }}
+                </a>
+            </h5>
+        </td>
+        <td>
+            <h5>
+                <a href="{{ task.project.manager.get_absolute_url }}">
+                    {{ task.project.manager.get_full_name }}
+                </a>
+            </h5>
+        </td>
+
+
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+{% endblock %}
