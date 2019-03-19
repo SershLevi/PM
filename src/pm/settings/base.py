@@ -37,6 +37,7 @@ EXTERNAL_APPS = [
     'mptt',
     'django_mptt_admin',
     'protector',
+    'django_filters'
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

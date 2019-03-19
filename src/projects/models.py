@@ -1,11 +1,12 @@
 import uuid
 
-from accounts.models import Account
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from mptt.fields import TreeForeignKey
 from mptt.models import MPTTModel
+from pm.settings import actual as settings
 
 
 class CreateModificateAbstactClass(models.Model):
@@ -36,38 +37,36 @@ class BaseClass(CreateModificateAbstactClass):
         abstract = True
 
     name = models.CharField(
-        max_length=100,
+        max_length=50,
         blank=False,
         null=False,
-        unique=True
+        unique=True,
     )
 
     slug = models.SlugField(
-        max_length=30,
-        blank=False,
-        null=False
+        editable=False,
+        unique=True
     )
 
     descriptions = models.TextField(
-        max_length=2000
+        max_length=2000,
     )
 
     def __str__(self):
         return self.name
 
+    def save(self, **kwargs): #TODO: Улучшить проверку
+        name = self.name
+        name.strip()
+        while ('  ' in name):
+            name = name.replace('  ', ' ')
+            print(name)
+        self.name = name
+        slug = self.name
 
-class Priority(BaseClass):
-    class Meta:
-        verbose_name = _('priority')
-        verbose_name_plural = _('priorities')
-
-    value = models.PositiveIntegerField()
-
-    def get_absolute_url(self):
-        return reverse('projects:priority_detail',
-                       args=[
-                           self.slug
-                       ])
+        slug.strip().replace(' ', '-').lower()
+        self.slug = slugify(slug)
+        super(BaseClass, self).save()
 
 
 class Status(BaseClass):
@@ -76,7 +75,7 @@ class Status(BaseClass):
         verbose_name_plural = _('statuses')
 
     def get_absolute_url(self):
-        return reverse('projects:statuses_list')
+        return reverse('projects:status_detail')
 
 
 class Url(CreateModificateAbstactClass):
@@ -87,7 +86,6 @@ class Url(CreateModificateAbstactClass):
     )
 
     url = models.URLField(
-
     )
 
     def __str__(self):
@@ -118,7 +116,7 @@ class Project(BaseClass):
     )
 
     person = models.ForeignKey(
-        to=Account,
+        to=settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         blank=False,
         null=True,
@@ -128,19 +126,9 @@ class Project(BaseClass):
 
     status = models.ForeignKey(
         to=Status,
-        on_delete=models.SET('undefined'),
-        default='Undefined',
+        on_delete=models.CASCADE,
         blank=False,
         verbose_name='project status',
-        related_name='projects',
-    )
-
-    priority = models.ForeignKey(
-        to=Priority,
-        default=999,
-        blank=False,
-        on_delete=models.SET(999),
-        verbose_name='project priority',
         related_name='projects',
     )
 
@@ -165,10 +153,6 @@ class Task(BaseClass, MPTTModel):
     class MPTTMeta:
         order_insertion_by = ['name']
 
-    name = models.CharField(
-        max_length=50,
-        unique=True
-    )
     parent = TreeForeignKey(
         'self',
         on_delete=models.CASCADE,
@@ -178,7 +162,7 @@ class Task(BaseClass, MPTTModel):
     )
 
     person = models.ForeignKey(
-        to=Account,
+        to=settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
         blank=False,
         null=True,
@@ -227,6 +211,8 @@ class Task(BaseClass, MPTTModel):
 
     )
 
+    priority = models.PositiveSmallIntegerField()
+
     def get_absolute_url(self):
         return reverse('projects:task_detail',
                        args=[
@@ -234,20 +220,25 @@ class Task(BaseClass, MPTTModel):
                        ])
 
 
-class Message(CreateModificateAbstactClass):
-    author = models.ForeignKey(
-        to=Account,
+class Comment(CreateModificateAbstactClass):
+    class Meta:
+        verbose_name = _('comment')
+        verbose_name_plural = _('comments')
+        # ordering = ('-creation_timestamp')
+
+    person = models.ForeignKey(
+        to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         blank=False,
         null=False,
-        verbose_name='message author',
-        related_name='messages'
+        verbose_name='Comment author',
+        related_name='comments'
     )
 
     task = models.ForeignKey(
         Task,
         on_delete=models.CASCADE,
-        related_name='messages'
+        related_name='comments'
 
     )
     text = models.TextField(
@@ -259,11 +250,5 @@ class Message(CreateModificateAbstactClass):
         blank=True
     )
 
-    def get_absolute_url(self):
-        return reverse('projects:task_detail',
-                       args=[
-                           self.task.slug
-                       ])
-
     def __str__(self):
-        return '{} about {}'.format(self.author.get_full_name, self.task.name)
+        return ' Comment by {} on {}'.format(self.person.get_full_name, self.task.name)

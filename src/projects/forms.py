@@ -1,23 +1,21 @@
+import django_filters
 from django import forms
 
-from .models import (
-    Task,
-    Project,
-    Message,
-    Brand,
-    Status)
+from .models import *
 
 
-class ProjectForm(forms.ModelForm):
+class ProjectForm(django_filters.FilterSet):
     class Meta:
         model = Project
         fields = '__all__'
 
-
-class TaskForm(forms.ModelForm):
+class TaskForm(django_filters.FilterSet):
     class Meta:
         model = Task
         fields = '__all__'
+
+    creation_year = django_filters.NumberFilter(field_name='creation_timestamp', lookup_expr='year')
+    creation_month = django_filters.NumberFilter(field_name='creation_timestamp', lookup_expr='month')
 
 
 class BrandForm(forms.ModelForm):
@@ -32,7 +30,8 @@ class StatusForm(forms.ModelForm):
         fields = '__all__'
 
 
-class MessageForm(forms.ModelForm):
+class CommentForm(forms.ModelForm):
     class Meta:
-        model = Message
+        model = Comment
         fields = '__all__'
+        exclude = ['person', 'task']

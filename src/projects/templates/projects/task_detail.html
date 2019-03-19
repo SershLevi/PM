@@ -1,8 +1,7 @@
 {% extends "projects/base.html" %}
 {% load crispy_forms_tags %}
 
-{% block title %}{{ project.name }}{% endblock %}
-
+{% block title %}{{ task.project.name }}{% endblock %}
 {% block content %}
 {% if task %}
 <h1>{{ task.name }}</h1>
@@ -43,7 +42,7 @@
 
     </tbody>
 </table>
-Messages
+Comments
 <table class="table table-striped table-sm">
     <thead>
     <tr>
@@ -54,30 +53,41 @@ Messages
     </tr>
     </thead>
     <tbody>
-    {% for message in task.messages.all %}
+    {% for comment in task.comments.all %}
     <tr>
         <td>
-            {{ message.author.get_full_name }}
+            {{ comment.person.get_full_name }}
         </td>
         <td>
-            {{ message.creation_timestamp }}
+            {{ comment.creation_timestamp }}
         </td>
         <td>
-            {{ message.text }}
+            {{ comment.text }}
         </td>
         <td>
-            {{ message.url }}
+            {{ comment.url }}
         </td>
     </tr>
-    {% endfor %}
-
+    {%empty%}
     </tbody>
 </table>
 
-<form action="{% url 'projects:add_message'%}" method="post">
-    {% csrf_token %}
-    <button type="submit" class="btn btn-primary">Write message</button>
+<p>There are no comments yet.</p>
+
+{% endfor %}
+
+</tbody>
+</table>
+
+{% if new_comments %}
+<h6>Your comments has been added.</h6>
+{% endif %}
+<form action="." method="post">
+    {%csrf_token%}
+    {{comment_form|crispy}}
+    <input type="submit" value="Add comment">
 </form>
+
 {% endif %}
 
 

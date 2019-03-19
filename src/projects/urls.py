@@ -7,7 +7,7 @@ urlpatterns = [
     # ---Projects---
     path(
         'projects/',
-        views.ProjectListView.as_view(),
+        views.project_list,
         name='projects_list'
     ),
     path(
@@ -34,7 +34,7 @@ urlpatterns = [
     # ---Tasks---
     path(
         'tasks/',
-        views.TaskListView.as_view(),
+        views.task_list,
         name='tasks_list'
     ),
     path(
@@ -43,8 +43,8 @@ urlpatterns = [
         name='task_create'
     ),
     path(
-        'task/<slug:slug>/',
-        views.TaskDetailView.as_view(),
+        'task/<slug:task_slug>/',
+        views.task_detail,
         name='task_detail'
     ),
     path(
@@ -112,10 +112,5 @@ urlpatterns = [
         name='status_delete'
     ),
     # ---END Status---
-    path(
-        'message',
-        views.MessageCreate.as_view(),
-        name='add_message'
-    ),
 
 ]

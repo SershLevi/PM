@@ -1,9 +1,15 @@
 {% extends "projects/base.html" %}
+{% load crispy_forms_tags %}
+
 {% block title %}Tasks{% endblock %}
 
 {% block content %}
-{% if tasks_list %}
 <h1>Tasks</h1>
+{% if tasks_list %}
+<form action="" method="get">
+    {{ filter.form|crispy }}
+    <input type="submit" value="Отфильтровать"/>
+</form>
 <table class="table table-striped table-sm">
     <thead>
     <tr>
@@ -16,7 +22,7 @@
     </tr>
     </thead>
     <tbody>
-    {% for task in tasks_list %}
+    {% for task in filter.qs %}
     <tr>
         <td>
             <h5>

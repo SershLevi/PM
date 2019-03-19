@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
@@ -8,20 +9,24 @@ from django.views.generic import (
 
 from .forms import (
     TaskForm,
-    ProjectForm, MessageForm, BrandForm, StatusForm)
+    ProjectForm, BrandForm, StatusForm, CommentForm)
 from .models import (
     Project,
     Task,
-    Message, Brand, Status)
+    Brand, Status)
 
 
 # ---Projects---
-class ProjectListView(ListView):
-    model = Project
-    template_name = 'projects/projects_list.html'
-    queryset = Project.objects.all()
 
-    context_object_name = 'projects_list'
+def project_list(request):
+    projects_list = Project.objects.all()
+    filter = ProjectForm(request.GET, queryset=Project.objects.all())
+    return render(request,
+                  'projects/projects_list.html',
+                  {
+                      'projects_list': projects_list,
+                      'filter': filter,
+                  })
 
 
 class ProjectCreate(CreateView):
@@ -50,12 +55,22 @@ class ProjectDelete(DeleteView):
 # ---END PROJECTS---
 
 # ---Tasks---
-class TaskListView(ListView):
-    model = Task
-    template_name = 'projects/tasks_list.html'
-    queryset = Task.objects.all()
+# class TaskListView(ListView):
+#     model = Task
+#     queryset = Task.objects.all()
+#
+#     context_object_name = 'tasks_list'
 
-    context_object_name = 'tasks_list'
+
+def task_list(request):
+    tasks_list = Task.objects.all()
+    filter = TaskForm(request.GET, queryset=Task.objects.all())
+    return render(request,
+                  'projects/tasks_list.html',
+                  {
+                      'tasks_list': tasks_list,
+                      'filter': filter,
+                  })
 
 
 class TaskCreate(CreateView):
@@ -68,6 +83,33 @@ class TaskDetailView(DetailView):
     model = Task
     template_name = 'projects/task_detail.html'
     context_object_name = 'task'
+
+
+def task_detail(request, task_slug):
+    task = get_object_or_404(
+        Task,
+        slug=task_slug
+    )
+    comments = task.comments.all()
+    new_comment = None
+    if request.method == 'POST':
+        comment_form = CommentForm(data=request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.task = task
+            new_comment.person = request.user
+            new_comment.save()
+    else:
+        comment_form = CommentForm()
+
+    return render(request,
+                  'projects/task_detail.html',
+                  {
+                      'task': task,
+                      'comments': comments,
+                      'new_comment': new_comment,
+                      'comment_form': comment_form,
+                  })
 
 
 class TaskUpdate(UpdateView):
@@ -148,11 +190,4 @@ class StatusDelete(DeleteView):
     model = Status
     success_url = reverse_lazy('statuses_list')
 
-
 # ---END Brands---
-
-
-class MessageCreate(CreateView):
-    model = Message
-    form_class = MessageForm
-    template_name = 'projects/forms/message_cu_form.html'

@@ -2,9 +2,9 @@
 {% block title %}Statuses{% endblock %}
 
 {% block content %}
-{% if statuses_list %}
 <h1>Statuses</h1>
 <a href="{% url 'projects:status_create' %}">Create new Status</a>
+{% if statuses_list %}
 <table class="table table-striped table-sm">
     <thead>
     <tr>
